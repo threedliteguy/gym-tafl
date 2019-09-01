@@ -13,7 +13,7 @@ class TaflEnv(gym.Env):
 
     def __init__(self, variant='Brandubh'):
         
-        print('init ', variant)
+        #print('init ', variant)
         
         self.variant = variant
         self._setGameVariant(variant)
@@ -26,7 +26,8 @@ class TaflEnv(gym.Env):
         self.observation_space = Dict({
             "board": Box(low=0,high=2,shape=(self.g.size,self.g.size),dtype=np.int32), 
             "pieces": Box(low=-1,high=2,shape=(self.g.size,self.g.size),dtype=np.int32), 
-            "playerToMove": Discrete(2)
+            "playerToMove": Discrete(2),
+            "validMoves": Box(low=0, high=self.g.size-1, shape=(len(self.g.pieces)*self.g.size*2,4), dtype=np.int32)
             })
 
         self.seed()
@@ -47,14 +48,22 @@ class TaflEnv(gym.Env):
     def _mapStateToObs(self):
         board = np.zeros((self.g.size, self.g.size), dtype=np.int32)
         pieces = np.zeros((self.g.size, self.g.size), dtype=np.int32)
+        validMoves = np.zeros((len(self.g.pieces)*self.g.size*2,4), dtype=np.int32)
 
         for item in self.g.board:
             board[item[1]][item[0]] = item[2]
 
         for piece in self.g.pieces:
             if piece[0] >= 0: pieces[piece[1]][piece[0]] = piece[2]
-   
-        ob = { "board":board, "pieces":pieces, "playerToMove":(self.g.time%2 == 0) }
+
+        player = -1 if self.g.time%2==0 else 1 
+
+        valids = self.g.getValidMoves(-player)
+        for m in range(len(valids)):
+            for n in range(4):
+                validMoves[m][n] = valids[m][n] 
+
+        ob = { "board":board, "pieces":pieces, "playerToMove": player, "validMoves":validMoves }
         return ob
     
     def _mapActionToMove(self,action):
@@ -62,13 +71,13 @@ class TaflEnv(gym.Env):
         return move
 
     def reset(self):
-        print('reset')
+        #print('reset')
         self._setGameVariant(self.variant)
         ob = self._mapStateToObs()
         return ob
 
     def step(self, action):
-        print('step')
+        #print('step')
         move = self._mapActionToMove(action)
         result = self.g.move(*move)
         reward = result
@@ -77,19 +86,18 @@ class TaflEnv(gym.Env):
         if episode_over:
            reward = 1000 
         ob = self._mapStateToObs()
-        player = -1 if self.g.time%2==0 else 1 
-        valids = self.g.getValidMoves(player)
-        return ob, reward, episode_over, {"valid_moves":valids}
+        return ob, reward, episode_over, {}
 
     def render(self, mode='human'):
-        print('render')
+        #print('render')
         self.g.render()
 
     def close(self):
-        print('close')
+        #print('close')
+        return
 
     def seed(self, seed=None):
-        print('seed')
+        #print('seed')
         self.np_random, seed = seeding.np_random(seed)
         return [seed]
 
