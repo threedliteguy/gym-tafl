@@ -1,1 +1,2 @@
-python3 Test.py
+python3 gym-tafl/gym_tafl/agents/play.py
+
