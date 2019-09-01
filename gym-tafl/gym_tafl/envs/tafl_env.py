@@ -56,9 +56,9 @@ class TaflEnv(gym.Env):
         for piece in self.g.pieces:
             if piece[0] >= 0: pieces[piece[1]][piece[0]] = piece[2]
 
-        player = -1 if self.g.time%2==0 else 1 
+        player = 1 if self.g.time%2==0 else -1 
 
-        valids = self.g.getValidMoves(-player)
+        valids = self.g.getValidMoves(player)
         for m in range(len(valids)):
             for n in range(4):
                 validMoves[m][n] = valids[m][n] 

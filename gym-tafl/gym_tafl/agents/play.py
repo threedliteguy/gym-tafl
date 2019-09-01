@@ -6,7 +6,7 @@ if __name__ == '__main__':
     env = gym.make('gym_tafl:tafl-v0', variant='Brandubh')
 
     action_space = env.action_space
-    # tafl order of play is black (attackers) first, white (defenders) second
+    # tafl order of play is white (with king) first, black (attackers) second #TODO check
     # tafl is asymetric, so separate models are required for each player.
     from gym_tafl.agents.human_agent_with_rules import HumanAgentWithRules
     from gym_tafl.agents.random_agent_with_rules import RandomAgentWithRules
@@ -21,7 +21,7 @@ if __name__ == '__main__':
 
        # tafl has only 2 plyers 
        player = observation['playerToMove']
-       player = 0 if player == -1 else 1
+       player = 1 if player == -1 else 0
 
        action = agents[player].act(observation, rewards[player], done)
 
