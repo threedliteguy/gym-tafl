@@ -9,6 +9,9 @@ class HumanAgentWithRules(object):
         self.action_space = action_space
 
     def act(self, observation, reward, done):
+        
+        if done: 
+            return
 
         print(observation['pieces'])
         valids = observation['validMoves']

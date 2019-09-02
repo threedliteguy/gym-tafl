@@ -26,24 +26,24 @@ class GameState:
    def isLegalMove(self,pieceno,x2,y2):
       try:
 
-         if x2 < 0 or y2 < 0 or x2 >= self.width or y2 > self.height: return -1
+         if x2 < 0 or y2 < 0 or x2 >= self.width or y2 > self.height: return -2000
          
          piece = self.pieces[pieceno]
          x1=piece[0]
          y1=piece[1]
          if x1<0: return -2 #piece was captured
-         if x1 != x2 and y1 != y2: return -3 #must move in straight line
-         if x1 == x2 and y1 == y2: return -4 #no move
+         if x1 != x2 and y1 != y2: return -3000 #must move in straight line
+         if x1 == x2 and y1 == y2: return -4000 #no move
 
          piecetype = piece[2]
-         if (piecetype == -1 and self.time%2 == 0) or (piecetype != -1 and self.time%2 == 1): return -5 #wrong player
+         if (piecetype == -1 and self.time%2 == 0) or (piecetype != -1 and self.time%2 == 1): return -5000 #wrong player
 
          for item in self.board:
             if item[0] == x2 and item[1] == y2 and item[2] > 0:
-                if piecetype != 2: return -10 #forbidden space
+                if piecetype != 2: return -6000 #forbidden space
          for apiece in self.pieces:
-            if y1==y2 and y1 == apiece[1] and ((x1 < apiece[0] and x2 >= apiece[0]) or (x1 > apiece[0] and x2 <= apiece[0])): return -20 #interposing piece
-            if x1==x2 and x1 == apiece[0] and ((y1 < apiece[1] and y2 >= apiece[1]) or (y1 > apiece[1] and y2 <= apiece[1])): return -20 #interposing piece
+            if y1==y2 and y1 == apiece[1] and ((x1 < apiece[0] and x2 >= apiece[0]) or (x1 > apiece[0] and x2 <= apiece[0])): return -7000 #interposing piece
+            if x1==x2 and x1 == apiece[0] and ((y1 < apiece[1] and y2 >= apiece[1]) or (y1 > apiece[1] and y2 <= apiece[1])): return -7000 #interposing piece
 
          return 0 # legal move
       except Exception as ex:
