@@ -49,7 +49,7 @@ class Trainer():
             self.optimizer.zero_grad()
             y_pred = self.model(x_train)
             loss = self.criterion(y_pred.squeeze(), y_train)
-            if epoch%10==0: print('Epoch {}  Loss {}'.format(epoch, loss.item()))
+            if (epoch+1)%10==0: print('Epoch {}  Loss {}'.format(epoch, loss.item()))
             loss.backward()
             self.optimizer.step()
         self.model.save()
@@ -86,8 +86,6 @@ class Loader():
        data = data[:-1] # remove trailing final reward line which has already been copied to previous line
 
 
-       print(data[0])
-
        # Encode
        piece_cats = [-1,0,1,2]
        action_cats = []
@@ -108,26 +106,25 @@ if __name__ == '__main__':
     
     loader = Loader()
     trainer = None
-    
-    from pathlib import Path
-    pathlist = Path("../../../output").glob('**/player*.txt')
-    for path in pathlist:
-        
-        spath = str(path)
-        print("Processing file: "+spath)
-        x_train, y_train = loader.load_data(spath)
-        input_row_count=len(x_train)
-        input_row_length=len(x_train[0])
-        #print('input_row_count',input_row_count)
-        #print('input_row_length',input_row_length)
+   
+    for n in range(10):
 
+        from pathlib import Path
+        pathlist = Path("../../../output").glob('**/player*.txt')
+        for path in pathlist:
+            
+            spath = str(path)
+            print("Processing file: "+spath)
+            x_train, y_train = loader.load_data(spath)
+            input_row_count=len(x_train)
+            input_row_length=len(x_train[0])
+            #print('input_row_count',input_row_count)
+            #print('input_row_length',input_row_length)
 
+            x_train = torch.tensor(x_train)
+            y_train = torch.tensor(y_train)
 
-
-        x_train = torch.tensor(x_train)
-        y_train = torch.tensor(y_train)
-
-        if trainer == None: trainer = Trainer(input_row_length,"models/model")
-        trainer.learn(x_train,y_train)
-        trainer.model.save()
+            if trainer == None: trainer = Trainer(input_row_length,"models/model")
+            trainer.learn(x_train,y_train)
+            trainer.model.save()
 
