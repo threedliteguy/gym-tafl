@@ -59,8 +59,9 @@ if __name__ == '__main__':
     from gym_tafl.agents.random_agent_with_rules import RandomAgentWithRules
     env = gym.make('gym_tafl:tafl-v0', variant='Brandubh')
     #agents = [ HumanAgentWithRules(env.action_space), RandomAgentWithRules(env.action_space) ]
-    agents = [ RandomAgentWithRules(env.action_space,"player1.txt"), RandomAgentWithRules(env.action_space,"player2.txt") ]
-    runner = Runner(env,agents)
-    runner.run()
+    for i in range(1000):
+       agents = [ RandomAgentWithRules(env.action_space,"output/player_1-"+str(i)+".txt"), RandomAgentWithRules(env.action_space,"output/player_2-"+str(i)+".txt") ]
+       runner = Runner(env,agents)
+       runner.run()
 
 
