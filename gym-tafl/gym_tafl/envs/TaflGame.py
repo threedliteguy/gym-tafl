@@ -92,16 +92,16 @@ class GameState:
 
 
    def getWinLose(self):
-       blackalive=False
-       for apiece in self.pieces:
-           if apiece[2]==-1 and apiece[0] > -1: blackalive=True
-       if not blackalive: return 1 #white won    
+       if self.time > 1000: return -1
+       # time counter has advanced after move to the next player's turn
+       player = 1 if self.time%2==0 else -1
+       nomoves = len(self.getValidMoves(player))==0
        for apiece in self.pieces:
            if apiece[2]==2 and apiece[0] > -1:
                for item in self.board:
                  if item[0]==apiece[0] and item[1]==apiece[1] and item[2]==1:
                      return 1 #white won
-               return 0 # no winner
+               return -player if nomoves else 0  # either no winner yet, or next player lost due to no moves available
        return -1  #white lost
    
    def getPieceNo(self,x,y):

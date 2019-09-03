@@ -91,7 +91,7 @@ class Loader():
        piece_cats = [-1,0,1,2]
        action_cats = []
        board_size=int(math.sqrt(len(data[0][1].split(' '))))
-       print('board_size=',board_size)
+       #print('board_size=',board_size)
        for i in range(board_size): action_cats.append(i)
 
        for i in range(len(data)):
@@ -107,10 +107,10 @@ class Loader():
 if __name__ == '__main__':
     
     loader = Loader()
-    trainer = None
-    
-    for player in [2,1]:
-      for n in range(10):
+
+    for player in [1,2]:
+
+        trainer = None
 
         from pathlib import Path
         pathlist = Path("../../../output").glob('**/player_'+str(player)+'-*.txt')
@@ -129,5 +129,6 @@ if __name__ == '__main__':
 
             if trainer == None: trainer = Trainer(input_row_length,"models/model_"+str(player))
             trainer.learn(x_train,y_train)
-            trainer.model.save()
+        
+        trainer.model.save()
 

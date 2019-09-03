@@ -68,18 +68,35 @@ if __name__ == '__main__':
   
     if arg == 'contest':
        
-        # With random play, white wins 75% of time.
+        # With random vs random play, white wins about 75% of time.
+        # With white random vs black greedy play, white wins about 7-10% of time.
+        # With white greedy vs black random play, white wins about 95% of time.
+        # With white greedy vs black greedy play, white wins about 25-30% of time.
 
         #agents = [ RandomAgentWithRules(env.action_space), RandomAgentWithRules(env.action_space) ]
-        #agents = [ ModelAgentWithRules('gym-tafl/gym_tafl/train/models/model_1',env.action_space), RandomAgentWithRules(env.action_space) ]
-        agents = [ RandomAgentWithRules(env.action_space), ModelAgentWithRules('gym-tafl/gym_tafl/train/models/model_2',env.action_space) ]
+        #agents = [ RandomAgentWithRules(env.action_space), GreedyAgentWithRules(env.action_space) ]
+        #agents = [ GreedyAgentWithRules(env.action_space), RandomAgentWithRules(env.action_space) ]
+        #agents = [ GreedyAgentWithRules(env.action_space), GreedyAgentWithRules(env.action_space) ]
         
+        #agents = [ ModelAgentWithRules('gym-tafl/gym_tafl/train/models/model_1',env.action_space), RandomAgentWithRules(env.action_space) ]
+        #agents = [ RandomAgentWithRules(env.action_space), ModelAgentWithRules('gym-tafl/gym_tafl/train/models/model_2',env.action_space) ]
+        
+        #agents = [ ModelAgentWithRules('gym-tafl/gym_tafl/train/models/model_1',env.action_space), GreedyAgentWithRules(env.action_space) ]
+        agents = [ GreedyAgentWithRules(env.action_space), ModelAgentWithRules('gym-tafl/gym_tafl/train/models/model_2',env.action_space) ]
+        
+        #agents = [ ModelAgentWithRules('gym-tafl/gym_tafl/train/models/model_1',env.action_space), ModelAgentWithRules('gym-tafl/gym_tafl/train/models/model_2',env.action_space) ]
+
+        # notes:
+        #The model for black seems to be better than random vs. white greedy
+
+
         score=0
-        for i in range(100):
+        rounds=100
+        for i in range(rounds):
            runner = Runner(env,agents)
            rewards = runner.run()
            if rewards[0] > 0: score = score + 1
-        print("White's final score: ", score, '%')   
+        print("White's final score: ", score/rounds*100, '%')   
 
     elif arg == 'record':  
    

@@ -43,16 +43,17 @@ class ModelAgentWithRules(BaseAgent):
            self.action_cats=[]
            for i in range(self.size): self.action_cats.append(i)
 
-       best_reward = -10000
-       best_index = -1
        obs_encoded = self.loader.encode_cats(self.piece_cats,pieces.ravel())
        obs_encoded = obs_encoded + [float(playerToMove)]
+       scores=[]
+       scoresum=0
        for i,valid in enumerate(valids):
           x = obs_encoded + self.loader.encode_cats(self.action_cats, valid) 
           if self.model == None:
              input_row_length = len(x) 
              print('input_row_length',input_row_length)
              self.model = FFNet(input_row_length, self.modelfile)    
+             print('Loading model file:',self.modelfile)
              self.model.load()
              self.model.eval()
           x = torch.tensor(x)
@@ -60,11 +61,18 @@ class ModelAgentWithRules(BaseAgent):
           
           #Print relative weights it has for moves
           #print(valid,y[0].item())
-          
-          if y > best_reward: 
-              best_reward = y
-              best_index = i
+          scores.append([y,valid])
+          scoresum = scoresum + y
 
-       return valids[best_index]       
+       scores.sort(key = lambda x:x[0], reverse = True) 
+       # pick highest scores with most probability
+       ep = random.random()
+       ep = 1 - ep * ep
+       scorelevel=scoresum
+       for score in scores:
+           scorelevel = scorelevel - score[0]
+           if scorelevel/scoresum < ep: return score[1]         
+
+       return scores[0][1]       
 
 
