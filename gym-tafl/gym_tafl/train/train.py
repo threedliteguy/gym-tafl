@@ -4,18 +4,19 @@ import torch.nn as nn
 import torch.nn.functional as F
 from itertools import chain
 from functools import partial
+import math
 
 class FFNet(nn.Module):
 
     def __init__(self, input_len, save_path):
         super(FFNet, self).__init__()
         self.save_path = save_path
-        self.fc1 = nn.Linear(input_len, 512)
-        self.fc2 = nn.Linear(512, 256)
-        self.fc3 = nn.Linear(256, 128)
-        self.fc4 = nn.Linear(128, 64)
-        self.fc5 = nn.Linear(64, 8)
-        self.fc6 = nn.Linear(8, 1)
+        self.fc1 = nn.Linear(input_len, 256)
+        self.fc2 = nn.Linear(256, 128)
+        self.fc3 = nn.Linear(128, 64)
+        self.fc4 = nn.Linear(64, 64)
+        self.fc5 = nn.Linear(64, 32)
+        self.fc6 = nn.Linear(32, 1)
  
     def forward(self, x):
         x = F.relu(self.fc1(x))
@@ -89,7 +90,8 @@ class Loader():
        # Encode
        piece_cats = [-1,0,1,2]
        action_cats = []
-       board_size=len(data[0][1])
+       board_size=int(math.sqrt(len(data[0][1].split(' '))))
+       print('board_size=',board_size)
        for i in range(board_size): action_cats.append(i)
 
        for i in range(len(data)):
@@ -106,11 +108,12 @@ if __name__ == '__main__':
     
     loader = Loader()
     trainer = None
-   
-    for n in range(10):
+    
+    for player in [2,1]:
+      for n in range(10):
 
         from pathlib import Path
-        pathlist = Path("../../../output").glob('**/player*.txt')
+        pathlist = Path("../../../output").glob('**/player_'+str(player)+'-*.txt')
         for path in pathlist:
             
             spath = str(path)
@@ -124,7 +127,7 @@ if __name__ == '__main__':
             x_train = torch.tensor(x_train)
             y_train = torch.tensor(y_train)
 
-            if trainer == None: trainer = Trainer(input_row_length,"models/model")
+            if trainer == None: trainer = Trainer(input_row_length,"models/model_"+str(player))
             trainer.learn(x_train,y_train)
             trainer.model.save()
 

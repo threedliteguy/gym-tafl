@@ -1,6 +1,6 @@
 import gym
 import random
-
+import sys
 
 class Runner(object):
 
@@ -48,6 +48,7 @@ class Runner(object):
         
         self.env.close()
 
+        return rewards
 
 
 
@@ -55,13 +56,43 @@ if __name__ == '__main__':
     
     # tafl order of play is white (with king) first, black (attackers) second #TODO check
     # tafl is asymetric, so separate models are required for each player.
+    
+    from gym_tafl.agents.model_agent_with_rules import ModelAgentWithRules
     from gym_tafl.agents.human_agent_with_rules import HumanAgentWithRules
     from gym_tafl.agents.random_agent_with_rules import RandomAgentWithRules
+    from gym_tafl.agents.greedy_agent_with_rules import GreedyAgentWithRules
+    
     env = gym.make('gym_tafl:tafl-v0', variant='Brandubh')
-    #agents = [ HumanAgentWithRules(env.action_space), RandomAgentWithRules(env.action_space) ]
-    for i in range(1000):
-       agents = [ RandomAgentWithRules(env.action_space,"output/player_1-"+str(i)+".txt"), RandomAgentWithRules(env.action_space,"output/player_2-"+str(i)+".txt") ]
-       runner = Runner(env,agents)
-       runner.run()
+
+    arg = 'human' if len(sys.argv)==1 else sys.argv[1]
+  
+    if arg == 'contest':
+       
+        # With random play, white wins 75% of time.
+
+        #agents = [ RandomAgentWithRules(env.action_space), RandomAgentWithRules(env.action_space) ]
+        #agents = [ ModelAgentWithRules('gym-tafl/gym_tafl/train/models/model_1',env.action_space), RandomAgentWithRules(env.action_space) ]
+        agents = [ RandomAgentWithRules(env.action_space), ModelAgentWithRules('gym-tafl/gym_tafl/train/models/model_2',env.action_space) ]
+        
+        score=0
+        for i in range(100):
+           runner = Runner(env,agents)
+           rewards = runner.run()
+           if rewards[0] > 0: score = score + 1
+        print("White's final score: ", score, '%')   
+
+    elif arg == 'record':  
+   
+        for i in range(1000):
+           agents = [ GreedyAgentWithRules(env.action_space,"output/player_1-"+str(i)+".txt"), 
+                      GreedyAgentWithRules(env.action_space,"output/player_2-"+str(i)+".txt") ]
+           runner = Runner(env,agents)
+           runner.run()
+
+    elif arg == 'human':
+
+        agents = [ HumanAgentWithRules(env.action_space), GreedyAgentWithRules(env.action_space) ]
+        runner = Runner(env,agents)
+        runner.run()
 
 

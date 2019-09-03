@@ -26,11 +26,6 @@ class RandomAgentWithRules(BaseAgent):
 
         return action
  
-    def save(self):
-        if (not self.recordFile is None):
-           text_file = open(self.recordFile, "w")
-           text_file.write('\n'.join(self.record))
-           text_file.close()
 
 
      
