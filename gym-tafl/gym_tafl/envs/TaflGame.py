@@ -92,6 +92,10 @@ class GameState:
 
 
    def getWinLose(self):
+       blackalive=False
+       for apiece in self.pieces:
+           if apiece[2]==-1 and apiece[0] > -1: blackalive=True
+       if not blackalive: return 1 #white won    
        for apiece in self.pieces:
            if apiece[2]==2 and apiece[0] > -1:
                for item in self.board:

@@ -1,2 +1,2 @@
-python3 gym-tafl/gym_tafl/agents/play.py
+python3 gym-tafl/gym_tafl/agents/play.py $1
 
