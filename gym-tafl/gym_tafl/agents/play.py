@@ -86,12 +86,15 @@ if __name__ == '__main__':
         
         #agents = [ ModelAgentWithRules('gym-tafl/gym_tafl/train/models/model_1',env.action_space), ModelAgentWithRules('gym-tafl/gym_tafl/train/models/model_2',env.action_space) ]
 
-        # notes:
-        #The model for black seems to be better than random vs. white greedy
+
+        # Notes:
+        # The model for black seems to be better than random and similar to greedy vs. white greedy
+        # The model for white seems to be twice as good as random but half as good as greedy vs. black greedy
+        # TODO: Not all of the offical rules are implemented in TaflGame.py, so those could be added, for example king being safe in home square.
 
 
         score=0
-        rounds=100
+        rounds=10000
         for i in range(rounds):
            runner = Runner(env,agents)
            rewards = runner.run()
@@ -108,7 +111,7 @@ if __name__ == '__main__':
 
     elif arg == 'human':
 
-        agents = [ HumanAgentWithRules(env.action_space), GreedyAgentWithRules(env.action_space) ]
+        agents = [ HumanAgentWithRules(env.action_space), ModelAgentWithRules('gym-tafl/gym_tafl/train/models/model_2',env.action_space) ]
         runner = Runner(env,agents)
         runner.run()
 
