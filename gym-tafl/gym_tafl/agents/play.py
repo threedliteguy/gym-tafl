@@ -82,19 +82,24 @@ if __name__ == '__main__':
         #agents = [ RandomAgentWithRules(env.action_space), ModelAgentWithRules('gym-tafl/gym_tafl/train/models/model_2',env.action_space) ]
         
         #agents = [ ModelAgentWithRules('gym-tafl/gym_tafl/train/models/model_1',env.action_space), GreedyAgentWithRules(env.action_space) ]
-        agents = [ GreedyAgentWithRules(env.action_space), ModelAgentWithRules('gym-tafl/gym_tafl/train/models/model_2',env.action_space) ]
+        #agents = [ GreedyAgentWithRules(env.action_space), ModelAgentWithRules('gym-tafl/gym_tafl/train/models/model_2',env.action_space) ]
         
         #agents = [ ModelAgentWithRules('gym-tafl/gym_tafl/train/models/model_1',env.action_space), ModelAgentWithRules('gym-tafl/gym_tafl/train/models/model_2',env.action_space) ]
+        #agents = [ ModelAgentWithRules('gym-tafl/gym_tafl/train/models_v2/model_1',env.action_space), ModelAgentWithRules('gym-tafl/gym_tafl/train/models_v1/model_2',env.action_space) ]
+        agents = [ ModelAgentWithRules('gym-tafl/gym_tafl/train/models_v2/model_1',env.action_space), GreedyAgentWithRules(env.action_space) ]
 
 
         # Notes:
-        # The model for black seems to be better than random and similar to greedy vs. white greedy
-        # The model for white seems to be twice as good as random but half as good as greedy vs. black greedy
+        # The v1 model for black seems to be better than random and similar to greedy vs. white greedy
+        # The v1 model for white seems to be twice as good as random but half as good as greedy vs. black greedy
+        # Recording games between the two v1 models, and using that to train a second set of models, the white model v2 improved to win 20-23% against black greedy (closer to white greedy), but the black model v2 performance fell to lose 60% vs white greedy.
+        # note: training times were increased in the second round of training.
+        
         # TODO: Not all of the offical rules are implemented in TaflGame.py, so those could be added, for example king being safe in home square.
-
+        # A fairly small Feed Forward net was used to be able to train and interate quickly on a CPU.
 
         score=0
-        rounds=10000
+        rounds=1000
         for i in range(rounds):
            runner = Runner(env,agents)
            rewards = runner.run()
@@ -104,14 +109,19 @@ if __name__ == '__main__':
     elif arg == 'record':  
    
         for i in range(1000):
-           agents = [ GreedyAgentWithRules(env.action_space,"output/player_1-"+str(i)+".txt"), 
-                      GreedyAgentWithRules(env.action_space,"output/player_2-"+str(i)+".txt") ]
+           agents = [ 
+                      #GreedyAgentWithRules(env.action_space,"output/player_1-"+str(i)+".txt"), 
+                      #GreedyAgentWithRules(env.action_space,"output/player_2-"+str(i)+".txt") 
+                      ModelAgentWithRules('gym-tafl/gym_tafl/train/models/model_1',env.action_space,"output/player_1-"+str(i)+".txt"), 
+                      ModelAgentWithRules('gym-tafl/gym_tafl/train/models/model_2',env.action_space,"output/player_2-"+str(i)+".txt") 
+                      ]
            runner = Runner(env,agents)
            runner.run()
 
     elif arg == 'human':
 
-        agents = [ HumanAgentWithRules(env.action_space), ModelAgentWithRules('gym-tafl/gym_tafl/train/models/model_2',env.action_space) ]
+        agents = [ HumanAgentWithRules(env.action_space), GreedyAgentWithRules(env.action_space) ]
+        #agents = [ HumanAgentWithRules(env.action_space), ModelAgentWithRules('gym-tafl/gym_tafl/train/models/model_2',env.action_space) ]
         runner = Runner(env,agents)
         runner.run()
 

@@ -106,11 +106,14 @@ class Loader():
 
 if __name__ == '__main__':
     
+    
     loader = Loader()
 
     for player in [1,2]:
 
-        trainer = None
+      trainer = None
+
+      for n in range(10):  
 
         from pathlib import Path
         pathlist = Path("../../../output").glob('**/player_'+str(player)+'-*.txt')
@@ -130,5 +133,5 @@ if __name__ == '__main__':
             if trainer == None: trainer = Trainer(input_row_length,"models/model_"+str(player))
             trainer.learn(x_train,y_train)
         
-        trainer.model.save()
+      trainer.model.save()
 
