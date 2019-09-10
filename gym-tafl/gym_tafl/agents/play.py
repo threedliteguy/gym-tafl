@@ -103,8 +103,10 @@ if __name__ == '__main__':
         # A fairly small Feed Forward net was used to be able to train and interate quickly on a CPU.
 
         score=0
-        #rounds=1000
-        rounds=10
+        
+        rounds=1000
+        #rounds=100
+
         for i in range(rounds):
            runner = Runner(env,agents)
            rewards = runner.run()
