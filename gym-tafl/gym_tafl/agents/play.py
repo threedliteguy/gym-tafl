@@ -102,10 +102,14 @@ if __name__ == '__main__':
         # TODO: Not all of the offical rules are implemented in TaflGame.py, so those could be added, for example king being safe in home square.
         # A fairly small Feed Forward net was used to be able to train and interate quickly on a CPU.
 
+
+        # Simple Mcts improved white's win rate vs black greedy to about 45% 
+
+
         score=0
         
-        rounds=1000
-        #rounds=100
+        #rounds=1000
+        rounds=100
 
         for i in range(rounds):
            runner = Runner(env,agents)
