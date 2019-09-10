@@ -105,34 +105,35 @@ class Loader():
 
 
 if __name__ == '__main__':
-    
-    
+
+
     loader = Loader()
 
     for player in [1,2]:
 
-      trainer = None
+        trainer = None
 
-      for n in range(100):  
+        for n in range(1000):
 
-        from pathlib import Path
-        pathlist = Path("../../../output").glob('**/player_'+str(player)+'-*.txt')
-        for path in pathlist:
-            
-            spath = str(path)
-            print("Processing file: "+spath)
-            x_train, y_train = loader.load_data(spath)
-            input_row_count=len(x_train)
-            input_row_length=len(x_train[0])
-            #print('input_row_count',input_row_count)
-            #print('input_row_length',input_row_length)
+            print("data pass ",n)
 
-            x_train = torch.tensor(x_train)
-            y_train = torch.tensor(y_train)
+            from pathlib import Path
+            pathlist = Path("../../../output").glob('**/player_'+str(player)+'-*.txt')
+            for path in pathlist:
 
-            if trainer == None: trainer = Trainer(input_row_length,"models/model_"+str(player))
-            trainer.learn(x_train,y_train)
+                spath = str(path)
+                print("Processing file: "+spath)
+                x_train, y_train = loader.load_data(spath)
+                input_row_count=len(x_train)
+                input_row_length=len(x_train[0])
+                #print('input_row_count',input_row_count)
+                #print('input_row_length',input_row_length)
 
+                x_train = torch.tensor(x_train)
+                y_train = torch.tensor(y_train)
 
-      trainer.model.save()
+                if trainer == None: trainer = Trainer(input_row_length,"models/model_"+str(player))
+                trainer.learn(x_train,y_train)
+
+        trainer.model.save()
 
