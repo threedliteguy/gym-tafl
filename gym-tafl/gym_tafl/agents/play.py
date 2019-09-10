@@ -61,6 +61,7 @@ if __name__ == '__main__':
     from gym_tafl.agents.human_agent_with_rules import HumanAgentWithRules
     from gym_tafl.agents.random_agent_with_rules import RandomAgentWithRules
     from gym_tafl.agents.greedy_agent_with_rules import GreedyAgentWithRules
+    from gym_tafl.agents.mcts_agent_with_rules import MctsAgentWithRules
     
     env = gym.make('gym_tafl:tafl-v0', variant='Brandubh')
 
@@ -86,7 +87,10 @@ if __name__ == '__main__':
         
         #agents = [ ModelAgentWithRules('gym-tafl/gym_tafl/train/models/model_1',env.action_space), ModelAgentWithRules('gym-tafl/gym_tafl/train/models/model_2',env.action_space) ]
         #agents = [ ModelAgentWithRules('gym-tafl/gym_tafl/train/models_v2/model_1',env.action_space), ModelAgentWithRules('gym-tafl/gym_tafl/train/models_v1/model_2',env.action_space) ]
-        agents = [ ModelAgentWithRules('gym-tafl/gym_tafl/train/models_v2/model_1',env.action_space), GreedyAgentWithRules(env.action_space) ]
+        #agents = [ ModelAgentWithRules('gym-tafl/gym_tafl/train/models_v2/model_1',env.action_space), GreedyAgentWithRules(env.action_space) ]
+
+        #agents = [ GreedyAgentWithRules(env.action_space), MctsAgentWithRules(env.action_space) ]
+        agents = [ MctsAgentWithRules(env.action_space), GreedyAgentWithRules(env.action_space) ]
 
 
         # Notes:
@@ -99,7 +103,8 @@ if __name__ == '__main__':
         # A fairly small Feed Forward net was used to be able to train and interate quickly on a CPU.
 
         score=0
-        rounds=1000
+        #rounds=1000
+        rounds=10
         for i in range(rounds):
            runner = Runner(env,agents)
            rewards = runner.run()
@@ -120,7 +125,9 @@ if __name__ == '__main__':
 
     elif arg == 'human':
 
-        agents = [ HumanAgentWithRules(env.action_space), GreedyAgentWithRules(env.action_space) ]
+        agents = [ HumanAgentWithRules(env.action_space), MctsAgentWithRules(env.action_space) ]
+        #agents = [ MctsAgentWithRules(env.action_space), HumanAgentWithRules(env.action_space) ]
+        #agents = [ HumanAgentWithRules(env.action_space), GreedyAgentWithRules(env.action_space) ]
         #agents = [ HumanAgentWithRules(env.action_space), ModelAgentWithRules('gym-tafl/gym_tafl/train/models/model_2',env.action_space) ]
         runner = Runner(env,agents)
         runner.run()

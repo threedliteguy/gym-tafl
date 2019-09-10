@@ -22,6 +22,7 @@ class GameState:
       self.pieces=g.pieces #[x,y,type]
       self.time=0
       self.done=0
+      self.quiet=False
 
    def isLegalMove(self,pieceno,x2,y2):
       try:
@@ -81,7 +82,7 @@ class GameState:
       piece[0]=x2
       piece[1]=y2
       caps = self.getCaptures(pieceno,x2,y2)
-      print("Captures = ",caps)
+      if not self.quiet: print("Captures = ",caps)
       for c in caps:
           c[0]=-99
 
@@ -113,7 +114,7 @@ class GameState:
    def move(self,x1,y1,x2,y2):
        pieceno = self.getPieceNo(x1,y1)
        #print("Pieceno =",pieceno)
-       print("Move:",x1,y1,x2,y2)
+       if not self.quiet: print("Move:",x1,y1,x2,y2)
        return self.moveByPieceNo(pieceno,x2,y2)
    
    def getValidMoves(self,player):
