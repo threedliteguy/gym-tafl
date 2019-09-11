@@ -117,10 +117,12 @@ if __name__ == '__main__':
    
         for i in range(1000):
            agents = [ 
+                      MctsAgentWithRules(env.action_space,"output/player_1-"+str(i)+".txt"), 
+                      #MctsAgentWithRules(env.action_space,"output/player_2-"+str(i)+".txt") 
                       #GreedyAgentWithRules(env.action_space,"output/player_1-"+str(i)+".txt"), 
-                      #GreedyAgentWithRules(env.action_space,"output/player_2-"+str(i)+".txt") 
-                      ModelAgentWithRules('gym-tafl/gym_tafl/train/models/model_1',env.action_space,"output/player_1-"+str(i)+".txt"), 
-                      ModelAgentWithRules('gym-tafl/gym_tafl/train/models/model_2',env.action_space,"output/player_2-"+str(i)+".txt") 
+                      GreedyAgentWithRules(env.action_space,"output/player_2-"+str(i)+".txt") 
+                      #ModelAgentWithRules('gym-tafl/gym_tafl/train/models/model_1',env.action_space,"output/player_1-"+str(i)+".txt"), 
+                      #ModelAgentWithRules('gym-tafl/gym_tafl/train/models/model_2',env.action_space,"output/player_2-"+str(i)+".txt") 
                       ]
            runner = Runner(env,agents)
            runner.run()
