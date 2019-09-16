@@ -133,8 +133,8 @@ if __name__ == '__main__':
 
     elif arg == 'human':
 
-        agents = [ HumanAgentWithRules(env.action_space), MctsAgentWithRules(env.action_space) ]
-        #agents = [ MctsAgentWithRules(env.action_space), HumanAgentWithRules(env.action_space) ]
+        #agents = [ HumanAgentWithRules(env.action_space), MctsAgentWithRules(env.action_space) ]
+        agents = [ MctsAgentWithRules(env.action_space), HumanAgentWithRules(env.action_space) ]
         #agents = [ HumanAgentWithRules(env.action_space), GreedyAgentWithRules(env.action_space) ]
         #agents = [ HumanAgentWithRules(env.action_space), ModelAgentWithRules('gym-tafl/gym_tafl/train/models/model_2',env.action_space) ]
         runner = Runner(env,agents)
