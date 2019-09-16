@@ -47,7 +47,7 @@ class MctsBoardState():
 
     def isTerminal(self):
         #if not self.reward==0: print("leaf reward=",self.reward, self.lastaction, self.player, self.originalplayer)
-        return self.reward == 1000 or self.reward == -1000
+        return not self.gs.getWinLose() == 0
 
     def getReward(self):
         return self.reward
@@ -103,7 +103,7 @@ class MctsAgentWithRules(BaseAgent):
         if not len(valids) == len(gs.getValidMoves(player)): raise Exception('rules mismatch')
  
         initialState = MctsBoardState(gs,player)
-        amcts = mcts(timeLimit=10000)
+        amcts = mcts(timeLimit=30000)
         action = amcts.search(initialState=initialState)
         chosen=[action.x1,action.y1,action.x2,action.y2]
 
